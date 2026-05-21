@@ -102,6 +102,11 @@ Decreasing mode
 <img width="802" height="679" alt="Screenshot 2026-05-20 015702" src="https://github.com/user-attachments/assets/10a53ce1-7b44-4952-8fb4-d28cc8074547" />
 
 
+## Detailed Results
+
+Detailed simulation outputs and performance analysis are available in:
+
+- [RESULTS_ANALYSIS.md](RESULTS_ANALYSIS.md)
 
 
 ## Future Improvements 
