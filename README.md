@@ -71,9 +71,15 @@ The simulation generates graphs for:
 - Waiting time analysis
 - Throughput across cycles
 
+Here are the results of the graphs for the throughout for 3 different modes for 3 cycles each:
 
+Increasing Mode
 <img width="793" height="675" alt="Screenshot 2026-05-20 020907" src="https://github.com/user-attachments/assets/643a2bb4-07e8-43c2-abf9-695de50ea538" />
+
+Stable mode
 <img width="876" height="780" alt="Screenshot 2026-05-20 020448" src="https://github.com/user-attachments/assets/29e72294-efff-40d4-8568-da775c59741f" />
+
+Decreasing mode
 <img width="802" height="679" alt="Screenshot 2026-05-20 015702" src="https://github.com/user-attachments/assets/10a53ce1-7b44-4952-8fb4-d28cc8074547" />
 
 
