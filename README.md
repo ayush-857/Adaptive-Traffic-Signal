@@ -62,6 +62,12 @@ The system evaluates:
 - Throughput (vehicles cleared)
 - Improvement over fixed equal-time signals
 
+
+## Workflow Diagram 
+
+<img width="1853" height="3973" alt="untitled (1)" src="https://github.com/user-attachments/assets/472abd95-aa73-47fa-b140-fa7ccdd516d3" />
+
+
 ## Visualization
 
 The simulation generates graphs for:
