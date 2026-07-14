@@ -307,31 +307,7 @@ def predict_next_traffic(
 
     return df
 
-def add_new_traffic(df, mode):
 
-    if mode == "increasing":
-
-        new_cars = np.random.randint(15, 30, size=len(df))
-        new_bikes = np.random.randint(20, 40, size=len(df))
-        new_buses = np.random.randint(3, 8, size=len(df))
-
-    elif mode == "decreasing":
-
-        new_cars = np.random.randint(5, 15, size=len(df))
-        new_bikes = np.random.randint(5, 15, size=len(df))
-        new_buses = np.random.randint(1, 4, size=len(df))
-
-    else:
-
-        new_cars = np.random.randint(10, 20, size=len(df))
-        new_bikes = np.random.randint(10, 25, size=len(df))
-        new_buses = np.random.randint(2, 6, size=len(df))
-
-    df["Cars"] += new_cars
-    df["Bikes"] += new_bikes
-    df["Buses"] += new_buses
-
-    return df
 
 def plot_cycle(df):
 
@@ -562,9 +538,6 @@ def main():
             model_bikes,
             model_buses
         )
-
-        df = add_new_traffic(df, mode)
-
         current_traffic_data = df[
             ["Road", "Cars", "Bikes", "Buses"]
         ].to_dict(orient="list")
