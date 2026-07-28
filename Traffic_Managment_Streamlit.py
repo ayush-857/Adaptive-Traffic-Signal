@@ -1058,13 +1058,15 @@ if st.session_state.simulation_complete:
 
     with col2:
 
+        if "cycle_selector" not in st.session_state:
+            st.session_state.cycle_selector = st.session_state.current_cycle
+        
         selected_cycle = st.selectbox(
             "Cycle",
             range(1, total_cycles + 1),
-            index=st.session_state.current_cycle - 1,
             key="cycle_selector"
         )
-
+        
         if selected_cycle != st.session_state.current_cycle:
             st.session_state.current_cycle = selected_cycle
             st.rerun()
