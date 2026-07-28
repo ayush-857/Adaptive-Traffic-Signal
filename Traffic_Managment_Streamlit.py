@@ -1057,20 +1057,10 @@ if st.session_state.simulation_complete:
             st.rerun()
 
     with col2:
-
-        if "cycle_selector" not in st.session_state:
-            st.session_state.cycle_selector = st.session_state.current_cycle
-        
-        selected_cycle = st.selectbox(
-            "Cycle",
-            range(1, total_cycles + 1),
-            key="cycle_selector"
+        st.markdown(
+            f"<h3 style='text-align:center;'>Cycle {st.session_state.current_cycle}</h3>",
+            unsafe_allow_html=True
         )
-        
-        if selected_cycle != st.session_state.current_cycle:
-            st.session_state.current_cycle = selected_cycle
-            st.rerun()
-
     with col3:
 
         if st.session_state.current_cycle < total_cycles:
@@ -1109,6 +1099,8 @@ if st.session_state.simulation_complete:
     )
 
     plot_cycle(selected_record["df"])
+
+
 
 
 
