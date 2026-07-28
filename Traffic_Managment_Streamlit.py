@@ -1059,17 +1059,14 @@ if st.session_state.simulation_complete:
 
     with col2:
 
-        st.session_state.cycle_selector = st.session_state.current_cycle
-    
-        selected_cycle = st.selectbox(
-            "Cycle",
-            range(1, total_cycles + 1),
-            key="cycle_selector"
+        st.markdown(
+            f"""
+            <div style="text-align:center; padding-top:8px;">
+                <h3>Cycle {st.session_state.current_cycle} of {total_cycles}</h3>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
-    
-        if selected_cycle != st.session_state.current_cycle:
-            st.session_state.current_cycle = selected_cycle
-            st.rerun()
 
     
     with col3:
