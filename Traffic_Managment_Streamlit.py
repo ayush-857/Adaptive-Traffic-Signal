@@ -68,7 +68,7 @@ if "current_cycle" not in st.session_state:
 if "show_summary" not in st.session_state:
     st.session_state.show_summary = False
 
-np.random.seed(42)
+
 
 traffic_data = {
     "Road": ["Road A", "Road B", "Road C", "Road D"],
