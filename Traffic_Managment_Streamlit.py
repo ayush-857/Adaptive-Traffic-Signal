@@ -533,6 +533,8 @@ def display_ai_decision(df):
         f"• **Green Signal Allocated:** {highest['Green Signal (sec)']:.2f} seconds."
     )
 
+    st.divider()
+
     if highest["Emergency"] == 1:
         st.write(
             "• 🚑 Emergency vehicle detected. Priority multiplier was applied to reduce emergency response time."
