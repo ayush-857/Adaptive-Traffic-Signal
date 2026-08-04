@@ -28,9 +28,7 @@ while maintaining a fixed 120-second signal cycle.
 
 st.divider()
 
-
 with st.container(border=True):
-
     st.subheader("⚙ Simulation Configuration")
 
     mode = st.selectbox(
@@ -50,9 +48,6 @@ with st.container(border=True):
         use_container_width=True
     )
 
-
-
-
 if "simulation_complete" not in st.session_state:
     st.session_state.simulation_complete = False
 
@@ -68,15 +63,12 @@ if "current_cycle" not in st.session_state:
 if "show_summary" not in st.session_state:
     st.session_state.show_summary = False
 
-
-
 traffic_data = {
     "Road": ["Road A", "Road B", "Road C", "Road D"],
     "Cars": [60, 50, 30, 20],
     "Bikes": [60, 50, 40, 25],
     "Buses": [13, 10, 5, 5]
 }
-
 
 
 def generate_training_data(mode):
@@ -111,6 +103,7 @@ def generate_training_data(mode):
         y_buses.append(next_buses)
     return X, y_cars, y_bikes, y_buses
 
+
 def train_models(X, y_cars, y_bikes, y_buses):
     model_cars = LinearRegression().fit(X, y_cars)
     model_bikes = LinearRegression().fit(X, y_bikes)
@@ -118,14 +111,14 @@ def train_models(X, y_cars, y_bikes, y_buses):
 
     return model_cars, model_bikes, model_buses
 
-def create_dataframe(traffic_data):
 
+def create_dataframe(traffic_data):
     df = pd.DataFrame(traffic_data)
 
     return df
 
-def assign_emergencies(df):
 
+def assign_emergencies(df):
     df["Emergency"] = np.random.choice(
         [0, 1],
         size=len(df),
@@ -134,22 +127,22 @@ def assign_emergencies(df):
 
     return df
 
-def calculate_weighted_vehicles(df):
 
+def calculate_weighted_vehicles(df):
     weight_car = 1
     weight_bike = 0.5
     weight_bus = 2
 
     df["Weighted Vehicles"] = (
-        df["Cars"] * weight_car +
-        df["Bikes"] * weight_bike +
-        df["Buses"] * weight_bus
+            df["Cars"] * weight_car +
+            df["Bikes"] * weight_bike +
+            df["Buses"] * weight_bus
     )
 
     return df
 
-def allocate_green_signals(df, prev_waiting_time):
 
+def allocate_green_signals(df, prev_waiting_time):
     total_vehicles = df["Weighted Vehicles"].sum()
 
     number_of_roads = len(df)
@@ -163,8 +156,8 @@ def allocate_green_signals(df, prev_waiting_time):
     df["Density"] = df["Weighted Vehicles"] / total_vehicles
 
     df["Green Signal (sec)"] = (
-        min_time +
-        (df["Density"] * remaining_time)
+            min_time +
+            (df["Density"] * remaining_time)
     )
 
     df["Green Signal (sec)"] = df[
@@ -172,9 +165,8 @@ def allocate_green_signals(df, prev_waiting_time):
     ].clip(upper=max_time)
 
     if prev_waiting_time is not None:
-
         df["Green Signal (sec)"] += (
-            prev_waiting_time.values * 0.1
+                prev_waiting_time.values * 0.1
         )
 
         df["Green Signal (sec)"] = df[
@@ -204,30 +196,28 @@ def allocate_green_signals(df, prev_waiting_time):
         ].sum()
 
         if eligible_density_sum > 0:
-
             df.loc[
                 eligible,
                 "Green Signal (sec)"
             ] += (
-                df.loc[eligible, "Density"]
-                / eligible_density_sum
-            ) * time_diff
+                         df.loc[eligible, "Density"]
+                         / eligible_density_sum
+                 ) * time_diff
 
     total_allocated = df["Green Signal (sec)"].sum()
 
     if total_allocated > cycle_time:
-
         df["Green Signal (sec)"] *= (
-            cycle_time / total_allocated
+                cycle_time / total_allocated
         )
 
     return df
 
-def calculate_metrics(df, cycle_time):
 
+def calculate_metrics(df, cycle_time):
     df["Waiting Time"] = (
-        df["Weighted Vehicles"]
-        / df["Green Signal (sec)"]
+            df["Weighted Vehicles"]
+            / df["Green Signal (sec)"]
     )
 
     avg_waiting_time = df["Waiting Time"].mean()
@@ -241,13 +231,13 @@ def calculate_metrics(df, cycle_time):
     equal_time = cycle_time / number_of_roads
 
     baseline_waiting = (
-        df["Weighted Vehicles"] / equal_time
+            df["Weighted Vehicles"] / equal_time
     ).mean()
 
     improvement = (
-        (baseline_waiting - avg_waiting_time)
-        / baseline_waiting
-    ) * 100
+                          (baseline_waiting - avg_waiting_time)
+                          / baseline_waiting
+                  ) * 100
 
     return (
         df,
@@ -258,26 +248,26 @@ def calculate_metrics(df, cycle_time):
         improvement
     )
 
-def clear_traffic(df):
 
+def clear_traffic(df):
     congestion_factor = (
-        df["Weighted Vehicles"]
-        / df["Weighted Vehicles"].max()
+            df["Weighted Vehicles"]
+            / df["Weighted Vehicles"].max()
     )
 
     cars_cleared = (
-        df["Green Signal (sec)"]
-        * (0.4 + 0.2 * (1 - congestion_factor))
+            df["Green Signal (sec)"]
+            * (0.4 + 0.2 * (1 - congestion_factor))
     )
 
     bikes_cleared = (
-        df["Green Signal (sec)"]
-        * (0.6 + 0.2 * (1 - congestion_factor))
+            df["Green Signal (sec)"]
+            * (0.6 + 0.2 * (1 - congestion_factor))
     )
 
     buses_cleared = (
-        df["Green Signal (sec)"]
-        * (0.15 + 0.1 * (1 - congestion_factor))
+            df["Green Signal (sec)"]
+            * (0.15 + 0.1 * (1 - congestion_factor))
     )
 
     cars_cleared = np.minimum(
@@ -304,20 +294,20 @@ def clear_traffic(df):
     df["Buses"] = df["Buses"].clip(lower=0)
 
     throughput = (
-        cars_cleared
-        + bikes_cleared
-        + buses_cleared
+            cars_cleared
+            + bikes_cleared
+            + buses_cleared
     ).sum()
 
     return df, throughput
 
-def predict_next_traffic(
-    df,
-    model_cars,
-    model_bikes,
-    model_buses
-):
 
+def predict_next_traffic(
+        df,
+        model_cars,
+        model_bikes,
+        model_buses
+):
     old_cars = df["Cars"].copy()
     old_bikes = df["Bikes"].copy()
     old_buses = df["Buses"].copy()
@@ -360,9 +350,7 @@ def predict_next_traffic(
     return df
 
 
-
 def plot_cycle(df):
-
     st.subheader("📊 Cycle Analysis")
 
     col1, col2, col3 = st.columns(3)
@@ -371,8 +359,7 @@ def plot_cycle(df):
     # Traffic Composition
     # ==========================
     with col1:
-
-        plt.figure(figsize=(4,3))
+        plt.figure(figsize=(4, 3))
 
         plt.bar(
             df["Road"],
@@ -416,8 +403,7 @@ def plot_cycle(df):
     # Green Signal Allocation
     # ==========================
     with col2:
-
-        plt.figure(figsize=(4,3))
+        plt.figure(figsize=(4, 3))
 
         plt.bar(
             df["Road"],
@@ -445,8 +431,7 @@ def plot_cycle(df):
     # Waiting Time
     # ==========================
     with col3:
-
-        plt.figure(figsize=(4,3))
+        plt.figure(figsize=(4, 3))
 
         plt.bar(
             df["Road"],
@@ -470,9 +455,9 @@ def plot_cycle(df):
 
         plt.close()
 
-def plot_throughput(throughput_history):
 
-    plt.figure(figsize=(7,3.5))
+def plot_throughput(throughput_history):
+    plt.figure(figsize=(7, 3.5))
 
     plt.plot(
         range(1, len(throughput_history) + 1),
@@ -495,12 +480,11 @@ def plot_throughput(throughput_history):
 
 
 def display_kpi_cards(
-    total_vehicles,
-    avg_waiting_time,
-    improvement,
-    throughput
+        total_vehicles,
+        avg_waiting_time,
+        improvement,
+        throughput
 ):
-
     st.subheader("📊 Cycle Overview")
 
     col1, col2, col3, col4 = st.columns(4)
@@ -528,10 +512,9 @@ def display_kpi_cards(
             label="🚦 Throughput",
             value=round(throughput)
         )
+
+
 def display_ai_decision(df):
-
-
-
     highest = df.loc[df["Green Signal (sec)"].idxmax()]
     lowest = df.loc[df["Green Signal (sec)"].idxmin()]
 
@@ -619,7 +602,6 @@ def display_ai_decision(df):
 
 
 def display_final_summary():
-
     st.title("📊 Final Summary Dashboard")
 
     records = st.session_state.cycle_records
@@ -649,7 +631,7 @@ def display_final_summary():
     with c2:
         st.metric(
             "Vehicles Cleared",
-            round(total_throughput,2)
+            round(total_throughput, 2)
         )
 
     with c3:
@@ -855,15 +837,16 @@ def display_final_summary():
                 f"{lowest_avg_wait['avg_waiting_time']:.2f} s"
             )
 
+
 def display_cycle_summary(
-    cycle,
-    df,
-    avg_waiting_time,
-    max_waiting_time,
-    fairness_variance,
-    baseline_waiting,
-    improvement,
-    throughput
+        cycle,
+        df,
+        avg_waiting_time,
+        max_waiting_time,
+        fairness_variance,
+        baseline_waiting,
+        improvement,
+        throughput
 ):
     st.subheader(f"🚦 Cycle {cycle} Summary")
 
@@ -904,9 +887,7 @@ def display_cycle_summary(
 
     st.divider()
 
-
     with st.expander("📋 Detailed Road Data"):
-
         st.dataframe(
             df[
                 [
@@ -922,11 +903,9 @@ def display_cycle_summary(
             use_container_width=True
         )
 
-if start_simulation:
-    st.success("Simulation Started!")
 
-    st.write(f"**Traffic Mode:** {mode}")
-    st.write(f"**Number of Cycles:** {num_cycles}")
+if start_simulation:
+
 
     X, y_cars, y_bikes, y_buses = generate_training_data(mode)
 
@@ -945,8 +924,7 @@ if start_simulation:
     current_traffic_data = traffic_data.copy()
 
     for cycle in range(1, num_cycles + 1):
-        st.divider()
-        st.subheader(f"Cycle {cycle}")
+
 
         df = create_dataframe(current_traffic_data)
 
@@ -1019,8 +997,6 @@ if start_simulation:
 
 if st.session_state.simulation_complete:
 
-
-
     if st.session_state.show_summary:
 
         display_final_summary()
@@ -1034,15 +1010,11 @@ if st.session_state.simulation_complete:
 
         st.stop()
 
-
-    st.write(f"Stored {len(st.session_state.cycle_records)} simulation cycles.")
-
+    
     total_cycles = len(st.session_state.cycle_records)
     st.subheader(
         f"Cycle {st.session_state.current_cycle} of {total_cycles}"
     )
-
-
 
     col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -1068,7 +1040,6 @@ if st.session_state.simulation_complete:
             unsafe_allow_html=True
         )
 
-    
     with col3:
 
         if st.session_state.current_cycle < total_cycles:
@@ -1093,8 +1064,6 @@ if st.session_state.simulation_complete:
     selected_record = st.session_state.cycle_records[
         st.session_state.current_cycle - 1
         ]
-
-
 
     display_cycle_summary(
         selected_record["cycle"],
