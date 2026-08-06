@@ -795,23 +795,23 @@ def display_final_summary():
 
     with col4:
 
-    with st.container(border=True):
-        st.markdown("### ⚖️ Most Balanced Cycle")
-
-        most_balanced = min(
-            records,
-            key=lambda x: x["fairness_variance"]
-        )
-
-        st.metric(
-            "Cycle",
-            most_balanced["cycle"]
-        )
-
-        st.write(
-            f"**Waiting Time Variance:** "
-            f"{most_balanced['fairness_variance']:.2f}"
-        )
+        with st.container(border=True):
+            st.markdown("### ⚖️ Most Balanced Cycle")
+    
+            most_balanced = min(
+                records,
+                key=lambda x: x["fairness_variance"]
+            )
+    
+            st.metric(
+                "Cycle",
+                most_balanced["cycle"]
+            )
+    
+            st.write(
+                f"**Waiting Time Variance:** "
+                f"{most_balanced['fairness_variance']:.2f}"
+            )
 
     st.markdown("")
 
