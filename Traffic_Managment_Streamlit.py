@@ -498,7 +498,7 @@ def display_kpi_cards(
     with col2:
         st.metric(
             label="⏱ Average Wait",
-            value=f"{avg_waiting_time:.2f} s"
+            value=f"{avg_waiting_time:.2f} "
         )
 
     with col3:
@@ -582,7 +582,7 @@ def display_ai_decision(df):
 
     st.metric(
         "Average Waiting Time",
-        f"{df['Waiting Time'].mean():.2f} sec"
+        f"{df['Waiting Time'].mean():.2f} "
     )
 
     st.markdown("---")
@@ -639,7 +639,7 @@ def display_final_summary():
     with c3:
         st.metric(
             "Average Wait",
-            f"{avg_wait:.2f} s"
+            f"{avg_wait:.2f} "
         )
 
     with c4:
@@ -795,17 +795,23 @@ def display_final_summary():
 
     with col4:
 
-        with st.container(border=True):
-            st.markdown("### 🚑 Most Emergency Road")
+    with st.container(border=True):
+        st.markdown("### ⚖️ Most Balanced Cycle")
 
-            st.metric(
-                "Road",
-                most_emergency_road
-            )
+        most_balanced = min(
+            records,
+            key=lambda x: x["fairness_variance"]
+        )
 
-            st.write(
-                f"Events: {road_emergencies[most_emergency_road]}"
-            )
+        st.metric(
+            "Cycle",
+            most_balanced["cycle"]
+        )
+
+        st.write(
+            f"**Waiting Time Variance:** "
+            f"{most_balanced['fairness_variance']:.2f}"
+        )
 
     st.markdown("")
 
