@@ -108,6 +108,15 @@ Decreasing mode
 <img width="802" height="679" alt="Screenshot 2026-05-20 015702" src="https://github.com/user-attachments/assets/10a53ce1-7b44-4952-8fb4-d28cc8074547" />
 
 
+## Running the Project
+
+The interactive simulation can be accessed through the Streamlit application:
+
+[Open the Adaptive Traffic Signal Simulation](https://adaptive-traffic-signal-eeycr6cm5whvddqx5uxnf.streamlit.app)
+
+The repository also includes the original Python implementation and the Streamlit-based interactive version of the simulation.
+
+
 ## Additional Documentation
 
 - [Results Analysis](RESULTS_ANALYSIS.md)
